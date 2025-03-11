@@ -16,12 +16,12 @@ Rails.application.routes.draw do
             resources :subscriptions, only: [:index, :show, :update] do
 
               resources :customer_subscription, only: [:index, :show, :update] do
-                resources :subscription_teas, only: [:index, :show]
+              resources :subscription_teas, only: [:index, :show]
+              end
+            end
+          end
+        end
       end
     end
   end
-
-
-
-
 end
