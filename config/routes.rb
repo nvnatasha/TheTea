@@ -18,7 +18,7 @@ Rails.application.routes.draw do
         end
       end
   
-      resources :subscriptions, only: [:index, :show] do
+      resources :subscriptions, only: [:index, :show, :update] do
         resources :subscription_teas, only: [:index, :show]
       end
   

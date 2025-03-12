@@ -3,4 +3,7 @@ FactoryBot.define do
         association :customer
         association :subscription
     end
+
+    
+
 end
