@@ -9,8 +9,8 @@ class SubscriptionSerializer
                     attributes: {
                         title: subscription.title,
                         price: subscription.price,
-                        status: subscription.status
-                        teas: subscription_teas.map do |tea|
+                        status: subscription.status_label,
+                        teas: subscriptio.teas.map do |tea|
                             {
                                 id: tea.id.to_s,
                                 name: tea.name,
@@ -33,8 +33,8 @@ class SubscriptionSerializer
                 attributes: {
                     title: subscription.title,
                     price: subscription.price,
-                    status: subscription.status
-                    teas: subscription_teas.map do |tea|
+                    status: subscription.status_label,
+                    teas: subscription.teas.map do |tea|
                         {
                             id: tea.id.to_s,
                             name: tea.name,

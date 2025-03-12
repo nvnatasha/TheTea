@@ -18,7 +18,7 @@ class CustomerSubscriptionSerializer
                             id: customer_subscription.subscription.id,
                             title: customer_subscription.subscription.title,
                             price: customer_subscription.subscription.price,
-                            status: customer_subscription.subscription.status
+                            status: customer_subscription.subscription.status_label
                         }
                     }
                 }

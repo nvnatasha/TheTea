@@ -19,8 +19,8 @@ class Api::V1::CustomersController < ApplicationController
 
             subscription.update(status: !subscription.status)
 
-            if subscription.save
-                render json: SubscriptionSerializer.format_subscription(subscription), status: :ok
+            if subscription.toggle_status!
+                render json: { message: "Subscription status updated to #{subscription.status_label}" }, status: :ok
             else
                 render json: { error: "Failed to update subscription" }, status: :unprocessable_entity
             end
