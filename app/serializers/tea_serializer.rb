@@ -8,7 +8,7 @@ class TeaSerializer
                     attributes: {
                         name: tea.name,
                         description: tea.description,
-                        brew_temp: tea.brew_temp,
+                        temp: tea.temp,
                         brew_time: tea.brew_time
                     }
                 }

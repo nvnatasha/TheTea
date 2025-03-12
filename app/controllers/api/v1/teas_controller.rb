@@ -1,4 +1,4 @@
-class Api::v1::TeasController < ApplicationController
+class Api::V1::TeasController < ApplicationController
 
     def index
         teas = Tea.all
@@ -13,5 +13,7 @@ class Api::v1::TeasController < ApplicationController
 
     private
 
-    params.require(:tea).permit(:name, :description, :temp, :brew_time)
+    def tea_params
+        params.require(:tea).permit(:name, :description, :temp, :brew_time)
+    end
 end
