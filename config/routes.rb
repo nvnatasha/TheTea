@@ -10,17 +10,20 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :users, only: [:index, :show] do
-        resources :customers, only: [:index, :show, :update] do
-          resources :teas, only: [:index, :show] do
-            resources :subscriptions, only: [:index, :show, :update] do
-
-              resources :customer_subscription, only: [:index, :show, :update] do
-              resources :subscription_teas, only: [:index, :show]
-              end
-            end
-          end
+      resources :users, only: [:index, :show]
+  
+      resources :customers, only: [:index, :show, :update] do
+        resources :subscriptions, only: [:index, :show, :update] do
+          resources :subscription_teas, only: [:index, :show]
         end
+      end
+  
+      resources :subscriptions, only: [:index, :show] do
+        resources :subscription_teas, only: [:index, :show]
+      end
+  
+      resources :teas, only: [:index, :show] do
+        resources :subscription_teas, only: [:index, :show]
       end
     end
   end
