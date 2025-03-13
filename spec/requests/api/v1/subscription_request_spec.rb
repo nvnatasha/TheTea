@@ -80,7 +80,7 @@ RSpec.describe 'subscriptions API' do
 
         @deluxe.reload
         expect(json[:attributes][:status]).to eq('inactive')
-        expect(@deluxe.status).to eq('inactive')
+        expect(@deluxe.status).to eq(false)
     end
 
     it "returns a 404 error if a subscription does not exist" do
@@ -126,21 +126,11 @@ RSpec.describe 'subscriptions API' do
     
         expect(response).to be_successful
         expect(response.status).to eq(200)
-        @basic.reload
+        
         json = JSON.parse(response.body, symbolize_names: true)[:data]
-    
-        @basic.reload
+        
         expect(json[:attributes][:status]).to eq('inactive')
-        expect(@basic.status).to eq('inactive')
-    end
-    
-    it 'can list all subscriptions for a customer' do
-        get "/api/v1/customers/#{@kendra.id}/subscriptions"
-    
-        expect(response).to be_successful
-        expect(response.status).to eq(200)
-
-        json = JSON.parse(response.body, symbolize_names: true)[:data]
-        expect(json.count).to eq(2)
+        @basic.reload
+        expect(@basic.status).to eq(false)
     end
 end

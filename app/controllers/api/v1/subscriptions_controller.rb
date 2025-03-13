@@ -11,29 +11,53 @@ class Api::V1::SubscriptionsController < ApplicationController
         render json: SubscriptionSerializer.format_subscription(subscription)
     end
 
+    # def update
+    #     customer = Customer.find(params[:customer_id])
+
+    #     if customer.nil?
+    #         render json: { error: 'Customer not found.' }, status: :not_found
+    #         return
+    #     end
+
+    #     subscription = customer.subscriptions.find(params[:id])
+
+    #     if subscription.nil?
+    #         render json: { error: 'Subscription not found.'}, status: :not_found
+    #         return
+    #     end
+
+    #     subscription.toggle_status
+    #         render json: SubscriptionSerializer.format_subscription(subscription), status: :ok
+    # end
+
     def update
         customer = Customer.find(params[:customer_id])
-
-        if customer.nil?
-            render json: { error: 'Customer not found.' }, status: :not_found
-            return
-        end
-
         subscription = customer.subscriptions.find(params[:id])
-
-        if subscription.nil?
-            render json: { error: 'Subscription not found.'}, status: :not_found
-            return
-        end
-
-        subscription.toggle_status
-            render json: SubscriptionSerializer.format_subscription(subscription), status: :ok
+        # binding.pry
+        status = ActiveModel::Type::Boolean.new.cast(subscription_params[:status]) 
+        subscription.update!(status: !subscription.status)
+        
+        # if status
+        #     if subscription.status
+        #         render json: { error: 'Coupon is already active' }, status: :bad_request
+        #     else
+        #         subscription.activate!
+        #         render json: SubscriptionSerializer.format_subscription(subscription), status: :ok
+        #     end
+        # else
+        #     if !subscription.status
+        #         render json: { error: 'Coupon is already inactive' }, status: :bad_request
+        #     else
+        #         subscription.deactivate!
+                render json: SubscriptionSerializer.format_subscription(subscription), status: :ok
+        #     end
+        # end
     end
 
     private
 
     def subscription_params
-        params.require(:subscription).permit(:title, :price, :status)
+        params.permit(:title, :price, :status)
     end
 
     def record_not_found(error)
