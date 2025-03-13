@@ -1,4 +1,5 @@
 class Api::V1::UsersController < ApplicationController
+    rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
     def index
         users = User.all
@@ -15,4 +16,9 @@ class Api::V1::UsersController < ApplicationController
     def user_params
         params.permit(:first_name, :last_name, :username)
     end
+
+    def record_not_found(error)
+        render json: { error: error.message }, status: :not_found
+    end
+    
 end

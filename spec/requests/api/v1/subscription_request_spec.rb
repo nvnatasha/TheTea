@@ -77,8 +77,70 @@ RSpec.describe 'subscriptions API' do
         patch "/api/v1/customers/#{@bobby.id}/subscriptions/#{@deluxe.id}"
 
         json = JSON.parse(response.body, symbolize_names: true)[:data]
+
         expect(json[:attributes][:status]).to eq('inactive')
         @deluxe.reload
-        expect(@deluxe.status_label).to eq('inactive')
+        expect(@deluxe.status).to eq('inactive')
+    end
+
+    it "returns a 404 error if a subscription does not exist" do
+        get "/api/v1/subscriptions/99999"
+
+        expect(response).to have_http_status(:not_found)
+        json = JSON.parse(response.body)
+        expect(json["error"]).to eq("Couldn't find Subscription with 'id'=99999")
+    end
+
+    it "returns a 404 error if a subscription does not exist" do
+        patch "/api/v1/customers/#{@kendra.id}/subscriptions/99999", params: { status: "active" }
+
+        expect(response).to have_http_status(:not_found)
+        json = JSON.parse(response.body)
+        expect(json["error"]).to include("Couldn't find Subscription with 'id'=99999")
+    end
+
+    it 'can return a customer subscription' do
+
+        get "/api/v1/customers/#{@kendra.id}/subscriptions/#{@basic.id}"
+    
+        expect(response).to be_successful
+        expect(response.status).to eq(200)
+
+        json = JSON.parse(response.body, symbolize_names: true)[:data]
+
+        expect(json[:attributes][:title]).to eq('Basic Monthly')
+        expect(json[:attributes][:status]).to eq('active')
+    end
+    
+    it 'can update a customer subscription status' do
+
+        get "/api/v1/customers/#{@kendra.id}/subscriptions/#{@basic.id}"
+    
+        expect(response).to be_successful
+        expect(response.status).to eq(200)
+
+        json = JSON.parse(response.body, symbolize_names: true)[:data]
+        expect(json[:attributes][:status]).to eq('active')
+
+        patch "/api/v1/customers/#{@kendra.id}/subscriptions/#{@basic.id}"
+
+        expect(response).to be_successful
+        expect(response.status).to eq(200)
+
+        json = JSON.parse(response.body, symbolize_names: true)[:data]
+
+        expect(json[:attributes][:status]).to eq('inactive')
+        @basic.reload
+        expect(@basic.status).to eq('inactive')
+    end
+    
+    it 'can list all subscriptions for a customer' do
+        get "/api/v1/customers/#{@kendra.id}/subscriptions"
+    
+        expect(response).to be_successful
+        expect(response.status).to eq(200)
+
+        json = JSON.parse(response.body, symbolize_names: true)[:data]
+        expect(json.count).to eq(2)
     end
 end

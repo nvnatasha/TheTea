@@ -24,4 +24,14 @@ RSpec.describe 'users API' do
         expect(json[:attributes][:username]).to eq('ckarmann')
 
     end
+
+    it 'returns a 404 error when a user does not exist' do
+        get "/api/v1/users/99999"
+
+        expect(response).to have_http_status(:not_found)
+
+        json = JSON.parse(response.body)
+
+        expect(json["error"]).to eq("Couldn't find User with 'id'=99999")
+    end
 end

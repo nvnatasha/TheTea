@@ -4,12 +4,15 @@ class Subscription < ApplicationRecord
     has_many :customer_subscriptions
     has_many :customers, through: :customer_subscriptions
 
+    validates :title, presence: true
+    validates :price, presence: true
+    validates :status, presence: true
+
+    scope :active, -> { where(status: 'active') }
+    scope :inactive, -> { where(status: 'inactive') }
+
     def toggle_status!
-        update(status: !status)
-    end
-    
-    def status_label
-        status ? "active" : "inactive"
+        update!(status: status == 'active' ? 'inactive' : 'active')
     end
 
 end

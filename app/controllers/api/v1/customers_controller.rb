@@ -1,4 +1,5 @@
 class Api::V1::CustomersController < ApplicationController
+    rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
     def index
         customers = Customer.all
@@ -10,29 +11,13 @@ class Api::V1::CustomersController < ApplicationController
         render json: CustomerSerializer.format_customer(customer)
     end
 
-    def update
-        customer = Customer.find(params[:id])
-        subscription_customer = customer.subscription_customers.find_by(subscription_id: params[:subscription_id])
-        if subscription_customer
-
-            subscription = subscription_customer.subscription
-
-            subscription.update(status: !subscription.status)
-
-            if subscription.toggle_status!
-                render json: { message: "Subscription status updated to #{subscription.status_label}" }, status: :ok
-            else
-                render json: { error: "Failed to update subscription" }, status: :unprocessable_entity
-            end
-
-        else
-            render json: { error: "Subscription not found for this customer" }, status: :not_found
-        end
-    end
-
     private
     
     def customer_params
         params.permit(:first_name, :last_name, :email, :address)
+    end
+
+    def record_not_found(error)
+        render json: { error: error.message }, status: :not_found
     end
 end

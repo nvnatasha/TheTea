@@ -16,7 +16,7 @@ class CustomerSerializer
                                 id: subscription.id.to_s,
                                 title: subscription.title,
                                 price: subscription.price,
-                                status: subscription.status_label
+                                status: subscription.status ? 'active' : 'inactive'
                             }
                         end
                     }
@@ -40,7 +40,7 @@ class CustomerSerializer
                             id: subscription.id.to_s,
                             title: subscription.title,
                             price: subscription.price,
-                            status: subscription.status_label
+                            status: subscription.status ? 'active' : 'inactive'
                         }
                     end
                 }

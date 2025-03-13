@@ -38,4 +38,12 @@ RSpec.describe 'teas API' do
         expect(json[:attributes][:temp]).to eq(190.0)
         expect(json[:attributes][:brew_time]).to eq(3.0)
     end
+
+    it "returns a 404 error if a tea does not exist" do
+        get "/api/v1/teas/99999"
+
+        expect(response).to have_http_status(:not_found)
+        json = JSON.parse(response.body)
+        expect(json["error"]).to eq("Couldn't find Tea with 'id'=99999")
+    end
 end

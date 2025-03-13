@@ -65,21 +65,14 @@ RSpec.describe 'customers API' do
         expect(json[:attributes][:subscriptions].first[:status]).to eq('active')
     end
 
-    it 'can update the subscription status of a customer' do
 
-        get "/api/v1/customers/#{@kendra.id}"
+    it 'returns a 404 error when a customer does not exist' do
+        get "/api/v1/customers/99999"
 
-        expect(response).to be_successful
-        expect(response.status).to eq(200)
+        expect(response).to have_http_status(:not_found)
 
-        json = JSON.parse(response.body, symbolize_names: true)[:data]
-        expect(json[:attributes][:subscriptions].first[:status]).to eq('active')
+        json = JSON.parse(response.body)
 
-        patch "/api/v1/customers/#{@kendra.id}/subscriptions/#{@basic.id}"
-
-        json = JSON.parse(response.body, symbolize_names: true)[:data]
-        expect(json[:attributes][:status]).to eq('inactive')
-        @basic.reload
-        expect(@basic.status_label).to eq('inactive')
+        expect(json["error"]).to eq("Couldn't find Customer with 'id'=99999")
     end
 end
