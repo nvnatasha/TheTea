@@ -1,6 +1,6 @@
 class Tea < ApplicationRecord
     has_many :subscription_teas
-    has_many :teas, through: :subscription_teas
+    has_many :subscriptions
     has_many :customers, through: :subscriptions
 
     validates :name, presence: true

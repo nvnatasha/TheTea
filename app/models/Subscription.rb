@@ -11,8 +11,9 @@ class Subscription < ApplicationRecord
     scope :active, -> { where(status: 'active') }
     scope :inactive, -> { where(status: 'inactive') }
 
-    def toggle_status!
+    def toggle_status
         update!(status: status == 'active' ? 'inactive' : 'active')
     end
+
 
 end

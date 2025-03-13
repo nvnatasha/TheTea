@@ -78,8 +78,8 @@ RSpec.describe 'subscriptions API' do
 
         json = JSON.parse(response.body, symbolize_names: true)[:data]
 
-        expect(json[:attributes][:status]).to eq('inactive')
         @deluxe.reload
+        expect(json[:attributes][:status]).to eq('inactive')
         expect(@deluxe.status).to eq('inactive')
     end
 
@@ -121,16 +121,16 @@ RSpec.describe 'subscriptions API' do
 
         json = JSON.parse(response.body, symbolize_names: true)[:data]
         expect(json[:attributes][:status]).to eq('active')
-
+    
         patch "/api/v1/customers/#{@kendra.id}/subscriptions/#{@basic.id}"
-
+    
         expect(response).to be_successful
         expect(response.status).to eq(200)
-
-        json = JSON.parse(response.body, symbolize_names: true)[:data]
-
-        expect(json[:attributes][:status]).to eq('inactive')
         @basic.reload
+        json = JSON.parse(response.body, symbolize_names: true)[:data]
+    
+        @basic.reload
+        expect(json[:attributes][:status]).to eq('inactive')
         expect(@basic.status).to eq('inactive')
     end
     

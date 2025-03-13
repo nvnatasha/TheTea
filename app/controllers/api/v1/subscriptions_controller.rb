@@ -26,12 +26,8 @@ class Api::V1::SubscriptionsController < ApplicationController
             return
         end
 
-        if subscription.toggle_status!
+        subscription.toggle_status
             render json: SubscriptionSerializer.format_subscription(subscription), status: :ok
-            binding.pry
-        else
-            render json: { error: 'Failed to update subscription' }, status: :unprocessable_entity
-        end
     end
 
     private
