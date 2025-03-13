@@ -15,6 +15,13 @@ Subscription.destroy_all
 SubscriptionTea.destroy_all
 CustomerSubscription.destroy_all
 
+ActiveRecord::Base.connection.reset_pk_sequence!('users')
+ActiveRecord::Base.connection.reset_pk_sequence!('customers')
+ActiveRecord::Base.connection.reset_pk_sequence!('teas')
+ActiveRecord::Base.connection.reset_pk_sequence!('subscriptions')
+ActiveRecord::Base.connection.reset_pk_sequence!('subscription_teas')
+ActiveRecord::Base.connection.reset_pk_sequence!('customer_subscriptions')
+
 
 admin1 = User.create!(first_name: "Chrissy", last_name: "Karmann", username: "chrissy_admin")
 admin2 = User.create!(first_name: "Marines", last_name: "Poke", username: "marines_admin")
