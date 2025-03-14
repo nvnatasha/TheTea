@@ -66,20 +66,20 @@ RSpec.describe 'subscriptions API' do
 
     it 'can update the status of a subscription' do
         
-        get "/api/v1/customers/#{@bobby.id}"
+        get "/api/v1/subscriptions/#{@deluxe.id}"
 
         expect(response).to be_successful
         expect(response.status).to eq(200)
 
         json = JSON.parse(response.body, symbolize_names: true)[:data]
-        expect(json[:attributes][:subscriptions].first[:status]).to eq('active')
+        expect(json[:attributes][:status]).to eq('active')
 
-        patch "/api/v1/customers/#{@bobby.id}/subscriptions/#{@deluxe.id}"
+        patch "/api/v1/subscriptions/#{@deluxe.id}"
 
         json = JSON.parse(response.body, symbolize_names: true)[:data]
 
-        @deluxe.reload
         expect(json[:attributes][:status]).to eq('inactive')
+        @deluxe.reload
         expect(@deluxe.status).to eq(false)
     end
 
@@ -101,7 +101,7 @@ RSpec.describe 'subscriptions API' do
 
     it 'can return a customer subscription' do
 
-        get "/api/v1/customers/#{@kendra.id}/subscriptions/#{@basic.id}"
+        get "/api/v1/subscriptions/#{@basic.id}"
     
         expect(response).to be_successful
         expect(response.status).to eq(200)
@@ -112,9 +112,9 @@ RSpec.describe 'subscriptions API' do
         expect(json[:attributes][:status]).to eq('active')
     end
     
-    it 'can update a customer subscription status' do
+    it 'can update subscription status' do
 
-        get "/api/v1/customers/#{@kendra.id}/subscriptions/#{@basic.id}"
+        get "/api/v1/subscriptions/#{@basic.id}"
     
         expect(response).to be_successful
         expect(response.status).to eq(200)
@@ -122,7 +122,7 @@ RSpec.describe 'subscriptions API' do
         json = JSON.parse(response.body, symbolize_names: true)[:data]
         expect(json[:attributes][:status]).to eq('active')
     
-        patch "/api/v1/customers/#{@kendra.id}/subscriptions/#{@basic.id}"
+        patch "/api/v1/subscriptions/#{@basic.id}"
     
         expect(response).to be_successful
         expect(response.status).to eq(200)
